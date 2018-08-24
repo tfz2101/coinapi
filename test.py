@@ -7,16 +7,16 @@ test_key = '7C973F6B-9E95-49DA-8E9E-55F35FC3092F'
 
 api = CoinAPIv1(test_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.date(2018, 7, 5).isoformat()
-end = datetime.date(2018, 7, 7).isoformat()
+start = datetime.date(2018, 8, 20).isoformat()
+end = datetime.date(2018, 8, 21).isoformat()
 
-#historical_trades_btc = api.trades_historical_data('COINBASE_SPOT_BTC_USD', {'time_start': start, 'time_end': end, 'limit': 10000})
+historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 10000})
 
-#historical_trades_btc = pd.DataFrame(historical_trades_btc)
+historical_trades_eth = pd.DataFrame(historical_trades_eth)
 
-#writer = pd.ExcelWriter('dataset_07_05_2018.xlsx')
-#historical_trades_btc.to_excel(writer, 'set1')
-#writer.save()
+writer = pd.ExcelWriter('eth_dataset_08_20_2018.xlsx')
+historical_trades_eth.to_excel(writer, 'set1')
+writer.save()
 
 '''
 for data in historical_trades_btc:
@@ -29,7 +29,7 @@ for data in historical_trades_btc:
     print('Taker Side: %s' % data['taker_side'])
 '''
 
-
+'''
 orderbooks_historical_data_btc_usd = api.orderbooks_historical_data('BITSTAMP_SPOT_BTC_USD', {'time_start': start})
 
 
@@ -46,3 +46,4 @@ for data in orderbooks_historical_data_btc_usd:
         print('- Price: %s' % bid['price'])
         print('- Size: %s' % bid['size'])
         
+'''
