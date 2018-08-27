@@ -7,14 +7,14 @@ test_key = '7C973F6B-9E95-49DA-8E9E-55F35FC3092F'
 
 api = CoinAPIv1(test_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.date(2018, 8, 4).isoformat()
-end = datetime.date(2018, 8, 5).isoformat()
+start = datetime.date(2018, 7, 15).isoformat()
+end = datetime.date(2018, 7, 16).isoformat()
 
 historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 10000})
 
 historical_trades_eth = pd.DataFrame(historical_trades_eth)
 
-writer = pd.ExcelWriter('eth_dataset_08_04_2018.xlsx')
+writer = pd.ExcelWriter('eth_dataset_07_15_2018_Bull_Market.xlsx')
 historical_trades_eth.to_excel(writer, 'set1')
 writer.save()
 
