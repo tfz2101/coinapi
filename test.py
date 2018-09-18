@@ -3,21 +3,48 @@ import datetime
 import pandas as pd
 import numpy as np
 
+
+
+def write(datadf, path, tab="Sheet1"):
+    WRITE_PATH = path
+    writer = pd.ExcelWriter(WRITE_PATH, engine='xlsxwriter')
+    datadf.to_excel(writer, sheet_name=tab)
+    writer.save()
+
+
 free_key = '7C973F6B-9E95-49DA-8E9E-55F35FC3092F'
 startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 7, 11, 18, 6, 3, 0).isoformat()
-end = datetime.datetime(2018, 7, 18, 0, 0, 0, 0).isoformat()
+start = datetime.datetime(2018, 7, 17, 16, 15, 35, 0).isoformat()
+end = datetime.datetime(2018, 7, 19, 0, 0, 0, 0).isoformat()
 
-historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 9999})
+'''
+historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 20000})
 
 historical_trades_eth = pd.DataFrame(historical_trades_eth)
 
-writer = pd.ExcelWriter('eth_dataset_07_10_07_18_6.xlsx')
+writer = pd.ExcelWriter('eth_dataset_07_15_07_19_F.xlsx')
 historical_trades_eth.to_excel(writer, 'set1')
 writer.save()
+
+
+data = historical_trades_eth
+print(data)
+last_date = str(data.ix[data.shape[0]-1,'time_exchange'])
+last_date = datetime.datetime.strptime(last_date, '%Y-%m-%dT%H:%M:%S.%f0000Z')
+print('last date', last_date)
+'''
+
+
+#JOIN SHEETS INTO ONE BIG DATASET
+data1 = pd.read_excel('eth_dataset_07_15_07_19_A.xlsx','set1')
+data2 = pd.read_excel('eth_dataset_07_15_07_19_B.xlsx','set1')
+
+data_total = data1.set_index('uuid').append(data2.set_index('uuid')).drop_duplicates()
+print('data_total', data_total)
+write(data_total, 'eth_dataset_07_15.xlsx', 'set1')
 
 '''
 for data in historical_trades_btc:
