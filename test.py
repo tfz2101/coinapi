@@ -15,29 +15,38 @@ def write(datadf, path, tab="Sheet1"):
 free_key = '7C973F6B-9E95-49DA-8E9E-55F35FC3092F'
 startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
+
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 7, 17, 16, 15, 35, 0).isoformat()
-end = datetime.datetime(2018, 7, 19, 0, 0, 0, 0).isoformat()
+start = datetime.datetime(2018, 9, 18, 14, 47, 43, 0).isoformat()
+end = datetime.datetime(2018, 9, 18, 23, 0, 0, 0).isoformat()
+file_name = 'eth_dataset_07_15_07_19'
+
+for index in range(0,1):
+    historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 20000})
+    historical_trades_eth = pd.DataFrame(historical_trades_eth)
+    write(historical_trades_eth, file_name + ' 5' + '.xlsx', 'sheet1')
+
+    data = historical_trades_eth
+
+    last_date = str(data.ix[data.shape[0]-1,'time_exchange'])
+    last_date = datetime.datetime.strptime(last_date, '%Y-%m-%dT%H:%M:%S.%f0000Z')
+    last_date_round = datetime.datetime(last_date.year, last_date.month, last_date.day, last_date.hour, last_date.minute, last_date.second, 0)
+    print('last date', last_date_round.isoformat())
+    last_date_round = last_date_round.isoformat()
+
+
+    start = last_date_round
+
+
+
+
+
+
+
+
 
 '''
-historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 20000})
-
-historical_trades_eth = pd.DataFrame(historical_trades_eth)
-
-writer = pd.ExcelWriter('eth_dataset_07_15_07_19_F.xlsx')
-historical_trades_eth.to_excel(writer, 'set1')
-writer.save()
-
-
-data = historical_trades_eth
-print(data)
-last_date = str(data.ix[data.shape[0]-1,'time_exchange'])
-last_date = datetime.datetime.strptime(last_date, '%Y-%m-%dT%H:%M:%S.%f0000Z')
-print('last date', last_date)
-'''
-
-
 #JOIN SHEETS INTO ONE BIG DATASET
 data1 = pd.read_excel('eth_dataset_07_15_07_19_A.xlsx','set1')
 data2 = pd.read_excel('eth_dataset_07_15_07_19_B.xlsx','set1')
@@ -45,6 +54,8 @@ data2 = pd.read_excel('eth_dataset_07_15_07_19_B.xlsx','set1')
 data_total = data1.set_index('uuid').append(data2.set_index('uuid')).drop_duplicates()
 print('data_total', data_total)
 write(data_total, 'eth_dataset_07_15.xlsx', 'set1')
+'''
+
 
 '''
 for data in historical_trades_btc:
