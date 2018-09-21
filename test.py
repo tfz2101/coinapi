@@ -18,14 +18,14 @@ startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 9, 18, 14, 47, 43, 0).isoformat()
-end = datetime.datetime(2018, 9, 18, 23, 0, 0, 0).isoformat()
-file_name = 'eth_dataset_07_15_07_19'
+start = datetime.datetime(2018, 6, 2, 6, 0, 0, 0).isoformat()
+end = datetime.datetime(2018, 6, 4, 11, 59, 0, 0).isoformat()
+file_name = 'eth_dataset_06_2_06_04'
 
-for index in range(0,1):
+for index in range(0,4):
     historical_trades_eth = api.trades_historical_data('COINBASE_SPOT_ETH_USD', {'time_start': start, 'time_end': end, 'limit': 20000})
     historical_trades_eth = pd.DataFrame(historical_trades_eth)
-    write(historical_trades_eth, file_name + ' 5' + '.xlsx', 'sheet1')
+    write(historical_trades_eth, file_name + ' ' + str(index) + '.xlsx', 'sheet1')
 
     data = historical_trades_eth
 
