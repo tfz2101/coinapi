@@ -18,7 +18,7 @@ startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 4, 29, 16, 34, 0, 0).isoformat()
+start = datetime.datetime(2018, 7, 8, 5, 5, 0, 0).isoformat()
 end = datetime.datetime(2018, 10, 10, 0, 0, 0, 0).isoformat()
 symbol = 'BITMEX_PERP_BTC_USD'
 interval = '1MIN'
@@ -43,9 +43,9 @@ for index in range(0,4):
     start = last_date_round
 
 '''
-ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 5000})
+ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
 print('data', ohlcv_historical)
-write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_1min2.xlsx', 'sheet1')
+write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_1min8.xlsx', 'sheet1')
 
 
 
