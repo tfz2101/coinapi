@@ -18,9 +18,9 @@ startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 4, 13, 13, 31, 0, 0).isoformat()
-end = datetime.datetime(2018, 4, 29, 16, 34, 0, 0).isoformat()
-symbol = 'BITMEX_PERP_BTC_USD'
+start = datetime.datetime(2018, 11, 9, 10, 0, 0, 0).isoformat()
+end = datetime.datetime(2018, 11, 9, 22, 20, 0, 0).isoformat()
+symbol = 'BITMEX_SPOT_BTC_USD' #BITMEX_PERP_BTC_USD
 interval = '5MIN'
 file_name = 'bitmex_BTC_dataset_'
 
@@ -41,11 +41,12 @@ for index in range(0,4):
 
 
     start = last_date_round
-
 '''
+
+#GET OHLCV DATA
 ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
 print('data', ohlcv_historical)
-write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_5min_04_13_to_04_29.xlsx', 'sheet1')
+#write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_5min_04_13_to_04_29.xlsx', 'sheet1')
 
 
 
@@ -53,7 +54,6 @@ write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_5min_04_13_to_04_29.xlsx', 'sh
 '''
 api = CoinAPIv1(startup_key)
 exchanges = api.metadata_list_exchanges()
-
 
 symbols = api.metadata_list_symbols()
 print('Symbols')
@@ -65,6 +65,9 @@ for symbol in symbols:
         print('Asset ID quote: %s' % symbol['asset_id_quote'])
     except:
         pass
+
+out = pd.DataFrame(symbols)
+write(out, 'coinapi_symbols', 'sheet1')
 '''
 
 '''
