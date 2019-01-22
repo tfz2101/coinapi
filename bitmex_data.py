@@ -17,18 +17,20 @@ free_key = '7C973F6B-9E95-49DA-8E9E-55F35FC3092F'
 startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 
-api = CoinAPIv1(startup_key)
+api = CoinAPIv1(free_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 4, 13, 0, 0, 0, 0).isoformat()
-end = datetime.datetime(2018, 11, 10, 15, 40, 0, 0).isoformat()
+start = datetime.datetime(2018, 6, 28, 12, 0, 0, 0).isoformat()
+end = datetime.datetime(2018, 6, 30, 0, 0, 0, 0).isoformat()
 symbol = 'BITMEX_SPOT_BTC_USD' #BITMEX_PERP_BTC_USD
 interval = '30MIN'
 file_name = 'bitmex_BTC_dataset_'
 
-'''
-for index in range(0,4):
-    ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end})
 
+#GET OHLCV DATA FOR MULTIPLE PULLS
+
+'''for index in range(0,1):
+    ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end})
+    
     historical_trades_eth = pd.DataFrame(historical_trades_eth)
     write(historical_trades_eth, file_name + ' ' + str(index) + '.xlsx', 'sheet1')
 
@@ -45,9 +47,13 @@ for index in range(0,4):
 '''
 
 #GET OHLCV DATA
-ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
+#ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
+ohlcv_historical = api.trades_historical_data(symbol, {'time_start': start, 'time_end': end, 'limit': 10000})
+
 print('data', ohlcv_historical)
-write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_30min_04_13_to_05_13.xlsx', 'sheet1')
+
+out_data = ohlcv_historical[['price',]]
+write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_Tick_6_30_2018.xlsx', 'sheet1')
 
 
 
