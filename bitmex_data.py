@@ -4,6 +4,11 @@ import pandas as pd
 import numpy as np
 import json
 import requests
+import sys
+sys.path.append('../')
+from ML_Trading import ML_functions as mlfcn
+from ML_Trading import Signals_Testing as st
+from ML_Trading import Stat_Fcns as sf
 
 
 def write(datadf, path, tab="Sheet1"):
@@ -48,12 +53,21 @@ file_name = 'bitmex_BTC_dataset_'
 
 #GET OHLCV DATA
 #ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
-ohlcv_historical = api.trades_historical_data(symbol, {'time_start': start, 'time_end': end, 'limit': 10000})
+ohlcv_historical = api.trades_historical_data(symbol, {'time_start': start, 'time_end': end, 'limit': 1})
 
 print('data', ohlcv_historical)
+st.write_new(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_Tick_6_30_2018_2.xlsx', 'raw_data')
 
-out_data = ohlcv_historical[['price',]]
-write(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_Tick_6_30_2018.xlsx', 'sheet1')
+timeindex = ohlcv_historical['time_exchange'].values
+
+for i in range(0, timeindex.shape[0]):
+    timeindex[i] = datetime.datetime.strptime(timeindex[i], '%Y-%m-%dT%H:%M:%S.%')
+    print('time index', timeindex[i])
+
+clean_data = ohlcv_historical.loc(['price','size','side'])
+clean_data = clean_data.set_index(timeindex)
+st.write(clean_data, 'bitmex_BTC_Tick_6_30_2018.xlsx', 'clean_data' )
+
 
 
 
