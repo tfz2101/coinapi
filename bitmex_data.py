@@ -24,7 +24,7 @@ startup_key = 'F717F31A-3C05-4D9A-A824-69FEF27CBC57'
 
 api = CoinAPIv1(free_key)
 exchanges = api.metadata_list_exchanges()
-start = datetime.datetime(2018, 6, 28, 12, 0, 0, 0).isoformat()
+start = datetime.datetime(2018, 6, 28, 12, 57, 0, 0).isoformat()
 end = datetime.datetime(2018, 6, 30, 0, 0, 0, 0).isoformat()
 symbol = 'BITMEX_SPOT_BTC_USD' #BITMEX_PERP_BTC_USD
 interval = '30MIN'
@@ -53,15 +53,15 @@ file_name = 'bitmex_BTC_dataset_'
 
 #GET OHLCV DATA
 #ohlcv_historical = api.ohlcv_historical_data(symbol,{'period_id': interval, 'time_start': start, 'time_end': end, 'limit': 20000})
-ohlcv_historical = api.trades_historical_data(symbol, {'time_start': start, 'time_end': end, 'limit': 1})
-
+ohlcv_historical = api.trades_historical_data(symbol, {'time_start': start, 'time_end': end, 'limit': 10000})
+ohlcv_historical = pd.DataFrame(ohlcv_historical)
 print('data', ohlcv_historical)
-st.write_new(pd.DataFrame(ohlcv_historical), 'bitmex_BTC_Tick_6_30_2018_2.xlsx', 'raw_data')
+st.write_new(ohlcv_historical, 'bitmex_BTC_Tick_6_30_2018_2.xlsx', 'raw_data')
 
 timeindex = ohlcv_historical['time_exchange'].values
 
 for i in range(0, timeindex.shape[0]):
-    timeindex[i] = datetime.datetime.strptime(timeindex[i], '%Y-%m-%dT%H:%M:%S.%')
+    timeindex[i] = datetime.datetime.strptime(timeindex[i], '%Y-%m-%dT%H:%M:%S.%fZ')
     print('time index', timeindex[i])
 
 clean_data = ohlcv_historical.loc(['price','size','side'])
